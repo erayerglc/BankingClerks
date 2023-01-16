@@ -1,62 +1,79 @@
-import java.util.PriorityQueue;
+import java.time.Duration;
 
-public class Main {
-    public static void main(String[] args) {
+public class BankingClerks {
+    public static int maxWaitingTime = 5;
+    public static void main(String[] args) throws CloneNotSupportedException {
 
-        customer c = new customer(5,2);
-        customer c2 = new customer(7,5);
-        customer c3= new customer(8,2);
-        customer c4= new customer(2,2);
+        Customer c = new Customer("09:05", 5);
+        Customer c2 = new Customer("09:08", 8);
+        Customer c3 = new Customer("09:01", 6);
+        Customer c4 = new Customer("09:02", 4);
 
-        PriorityQueue<customer> p = new PriorityQueue<>();
-        PriorityQueue<customer> p2 = new PriorityQueue<>();
-        p2.add(c);
-        p2.add(c2);
-        p2.add(c3);
-        p2.add(c4);
+        CustomersMinHeap temp = new CustomersMinHeap(4);
 
-        p.add(c);
-        p.add(c2);
-        p.add(c3);
-        p.add(c4);
+        temp.insert(c);
+        temp.insert(c2);
+        temp.insert(c3);
+        temp.insert(c4);
+
+
+
+
 
         int low = 1;
-        int high = p.size();
-        int maxWaiting = 5;
+        int high = 4;
         int ans = 0;
-        while(low <= high){
+
+        while(low < high){
+
             int clerks = (low+high)/2;
-            PriorityQueue<customer> que = p;
-            PriorityQueue<Integer> employees =  new PriorityQueue<>();
-            for(int i = 0; i < clerks; i++){
-                employees.add(0);
+            ClerksMinHeap clerksMinheap =initialise(clerks);
+            CustomersMinHeap customersMinHeap = temp.clone();
 
-            }
+            Boolean isPossible = simulate(clerks,clerksMinheap,customersMinHeap);
+            System.out.println(clerks+" "+isPossible);
 
-            boolean exceedsWaitTime = false;
-            while (p.isEmpty() == false){
-                customer customer =p.peek();
-                p.poll();
-                int emp = employees.peek();
-                employees.poll();
 
-                if(customer.arrival < emp){
-                    int time = emp-customer.arrival;
-                    if(time> maxWaiting){
-                        exceedsWaitTime = true;
-                        break;
-                    }
-                }
-            }
-
-            if(exceedsWaitTime == true){
-                low = clerks+1;
-            }
-            else{
-
+            if(isPossible == true){
                 ans = clerks;
                 high = clerks-1;
+
             }
+            else{
+                low = clerks+1;
+            }
+
+
+
+
+
+
+
+
+
         }
+        System.out.println(low+" "+high);
+
+
+
+
     }
+
+    
+
+    static ClerksMinHeap initialise(int clerks){
+        ClerksMinHeap temp = new ClerksMinHeap(clerks);
+
+
+        for (int i = 0; i < clerks; i++){
+            Clerk c = new Clerk("09:00");
+            temp.insert(c);
+
+        }
+        return temp;
+
+    }
+
+
+
 }
