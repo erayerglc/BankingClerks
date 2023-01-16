@@ -4,8 +4,8 @@ public class BankingClerks {
     public static int maxWaitingTime = 5;
     public static void main(String[] args) throws CloneNotSupportedException {
 
-        Customer c = new Customer("09:05", 5);
-        Customer c2 = new Customer("09:08", 8);
+        Customer c = new Customer("09:05", 2);
+        Customer c2 = new Customer("09:08", 3);
         Customer c3 = new Customer("09:01", 6);
         Customer c4 = new Customer("09:02", 4);
 
@@ -52,14 +52,38 @@ public class BankingClerks {
 
 
         }
-        System.out.println(low+" "+high);
+        System.out.println(ans);
 
 
 
 
     }
 
-    
+    static boolean simulate(int clerks, ClerksMinHeap clerksMinheap, CustomersMinHeap customersMinHeap){
+        int time = 0;
+
+        while (customersMinHeap.isEmpty() == false){
+            if(time>maxWaitingTime){
+                return false;
+            }
+            Customer c = customersMinHeap.top();
+            customersMinHeap.removeMin();
+
+            if(clerksMinheap.top().available.isBefore(c.arrival)){
+                clerksMinheap.top().setAvailable(c.arrival.plusMinutes(c.timeNeeded));
+            }
+            else{
+
+                long minutes = Duration.between(c.arrival, clerksMinheap.top().available).toMinutes();
+                time+=(int)minutes;
+
+
+            }
+
+        }
+        return true;
+
+    }
 
     static ClerksMinHeap initialise(int clerks){
         ClerksMinHeap temp = new ClerksMinHeap(clerks);
