@@ -1,13 +1,15 @@
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 
 public class BankingClerks {
     public static int maxWaitingTime = 5;
     public static void main(String[] args) throws CloneNotSupportedException {
 
-        Customer c = new Customer("09:05", 2);
-        Customer c2 = new Customer("09:08", 3);
-        Customer c3 = new Customer("09:01", 6);
-        Customer c4 = new Customer("09:02", 4);
+        Customer c = new Customer("08:05", 2);
+        Customer c2 = new Customer("08:08", 3);
+        Customer c3 = new Customer("08:01", 6);
+        Customer c4 = new Customer("08:02", 4);
 
         CustomersMinHeap temp = new CustomersMinHeap(4);
 
@@ -20,6 +22,15 @@ public class BankingClerks {
 
 
 
+
+//        System.out.println(ans);
+
+
+
+
+    }
+
+    static int minimumClerks( CustomersMinHeap temp, int maximumWaitingTime) throws CloneNotSupportedException {
         int low = 1;
         int high = 4;
         int ans = 0;
@@ -31,7 +42,7 @@ public class BankingClerks {
             CustomersMinHeap customersMinHeap = temp.clone();
 
             Boolean isPossible = simulate(clerks,clerksMinheap,customersMinHeap);
-            System.out.println(clerks+" "+isPossible);
+//            System.out.println(clerks+" "+isPossible);
 
 
             if(isPossible == true){
@@ -44,19 +55,8 @@ public class BankingClerks {
             }
 
 
-
-
-
-
-
-
-
         }
-        System.out.println(ans);
-
-
-
-
+        return ans;
     }
 
     static boolean simulate(int clerks, ClerksMinHeap clerksMinheap, CustomersMinHeap customersMinHeap){
@@ -79,11 +79,30 @@ public class BankingClerks {
 
 
             }
+           
 
         }
+        System.out.println();
         return true;
 
     }
+    public static String generateRandomTime(String startTime, String endTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        Date start = null, end = null;
+        try {
+            start = sdf.parse(startTime);
+            end = sdf.parse(endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        long startTimeInMillis = start.getTime();
+        long endTimeInMillis = end.getTime();
+        long randomTime = startTimeInMillis + (long) (Math.random() * (endTimeInMillis - startTimeInMillis));
+
+        return sdf.format(new Date(randomTime));
+    }
+
 
     static ClerksMinHeap initialise(int clerks){
         ClerksMinHeap temp = new ClerksMinHeap(clerks);
