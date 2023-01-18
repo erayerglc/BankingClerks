@@ -116,7 +116,75 @@ public class BankingClerks {
         return temp;
 
     }
+public static void initializeMinHeaps() {
+        shift1Commercial = new CustomersMinHeap(shift1.size);
+        shift1casual = new CustomersMinHeap(shift1.size);
+        shift1loans = new CustomersMinHeap(shift1.size);
+        shift2Commercial = new CustomersMinHeap(shift2.size);
+        shift2casual = new CustomersMinHeap(shift2.size);
+        shift2loans = new CustomersMinHeap(shift2.size);
+        shift3Commercial = new CustomersMinHeap(shift3.size);
+        shift3casual = new CustomersMinHeap(shift3.size);
+        shift3loans = new CustomersMinHeap(shift3.size);
 
+        // Iterating through customers in each shift and add them to the appropriate minheap based on unit
+        while (!shift1.isEmpty()) {
+            Customer c = shift1.removeMin();
+            if (c.unit == 1) {
+                shift1Commercial.insert(c);
+            } else if (c.unit == 2) {
+                shift1casual.insert(c);
+            } else if (c.unit == 3) {
+                shift1loans.insert(c);
+            }
+        }
+        // Iterating through customers in each shift and add them to the appropriate minheap based on unit
+        while (!shift2.isEmpty()) {
+            Customer c = shift2.removeMin();
+            if (c.unit == 1) {
+                shift2Commercial.insert(c);
+            } else if (c.unit == 2) {
+                shift2casual.insert(c);
+            } else if (c.unit == 3) {
+                shift2loans.insert(c);
+            }
+        }
+        // Iterating through customers in each shift and add them to the appropriate minheap based on unit
+
+        while (!shift3.isEmpty()) {
+            Customer c = shift3.removeMin();
+            if (c.unit == 1) {
+                shift3Commercial.insert(c);
+            } else if (c.unit == 2) {
+                shift3casual.insert(c);
+            } else if (c.unit == 3) {
+                shift3loans.insert(c);
+            }
+        }
+    }
+    //method to copy minheap
+    public static CustomersMinHeap copy(CustomersMinHeap customersMinHeap){
+        ArrayList<Customer>arr = new ArrayList<>();
+
+        CustomersMinHeap tem = new CustomersMinHeap(customersMinHeap.size());
+        //copying minheap
+        while(customersMinHeap.isEmpty() == false){
+            Customer c = customersMinHeap.top();
+            customersMinHeap.removeMin();
+            arr.add(c);
+            tem.insert(c);
+
+        }
+
+        //restoring previous minheap
+        for(int i = 0; i < arr.size(); i++){
+            customersMinHeap.insert(arr.get(i));
+        }
+
+        return tem;
+
+    }
+}
 
 
 }
