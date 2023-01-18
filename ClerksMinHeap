@@ -1,79 +1,99 @@
 public class ClerksMinHeap implements Cloneable {
-    private Clerk[] heap;
-    private int maxSize;
+    private Clerk[] arr;
+    private int capacity;
+    int size = 0;
+
 
     public ClerksMinHeap(int capacity) {
-        heap = new Clerk[capacity];
+        arr = new Clerk[capacity];
     }
 
+    //method to check if heap is emoty
     public boolean isEmpty() {
-        return maxSize == 0;
+        return capacity == 0;
     }
 
+    //method to return top or min
     public Clerk top() {
         if (isEmpty()) {
-            throw new IllegalStateException("Heap is empty");
+            System.out.println("Heap is empty");
         }
-        return heap[0];
+
+        return arr[0];
     }
 
-    public void insert(Clerk clerk) { 
-        if (maxSize == heap.length) {
-            throw new IllegalStateException("Heap is full");
+    //method for inserting clerks
+    public void add(Clerk clerk) {
+        size++;
+        if (capacity == arr.length) {
+            System.out.println("Heap is full");
         }
 
-        heap[maxSize] = clerk;
-        int current = maxSize;
-        maxSize++;
-
-        while (current != 0 && heap[current].getAvailable().isBefore(heap[parent(current)].getAvailable())) {
+        // insert into the heap
+        arr[capacity] = clerk;
+        int current = capacity;
+        capacity++;
+        // swap until satisfied
+        while (current != 0 && arr[current].getAvailableTime().isBefore(arr[parent(current)].getAvailableTime())) {
             swap(current, parent(current));
             current = parent(current);
         }
     }
 
-    public Clerk removeMin() {
+    //method to remove min
+    public Clerk removeTop() {
+        size--;
         Clerk min = top();
-        heap[0] = heap[maxSize - 1];
-        maxSize--;
-        minHeapify(0);
+        arr[0] = arr[capacity - 1];
+        capacity--;
+        //heapify to make it minheap
+        heapify(0);
         return min;
     }
 
-    private void minHeapify(int index) {
-        int left = left(index);
-        int right = right(index);
-        int smallest = index;
+    //method to fix minheap
+    private void heapify(int i) {
+        int left = left(i);
+        int right = right(i);
+        int minimum = i;
 
-        if (left < maxSize && heap[left].getAvailable().isBefore(heap[smallest].getAvailable())) {
-            smallest = left;
+        //search for min
+        if (left < capacity && arr[left].getAvailableTime().isBefore(arr[minimum].getAvailableTime())) {
+            minimum = left;
+        }
+        ///search for min
+        if (right < capacity && arr[right].getAvailableTime().isBefore(arr[minimum].getAvailableTime())) {
+            minimum = right;
         }
 
-        if (right < maxSize && heap[right].getAvailable().isBefore(heap[smallest].getAvailable())) {
-            smallest = right;
-        }
-
-        if (smallest != index) {
-            swap(index, smallest);
-            minHeapify(smallest);
+        if (minimum != i) {
+            //swap and heapify
+            swap(i, minimum);
+            heapify(minimum);
         }
     }
-
+    //get parent
     private int parent(int index) {
         return (index - 1) / 2;
     }
-
+    //get left child
     private int left(int index) {
         return 2 * index + 1;
     }
-
+    //get right child
     private int right(int index) {
         return 2 * index + 2;
     }
-
+    //swap method
     private void swap(int i, int j) {
-        Clerk temp = heap[i];
-        heap[i] = heap[j];
-        heap[j] = temp;
+        Clerk temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
+    // return size
+    public int size(){
+        return size;
+    }
+
+
 }
