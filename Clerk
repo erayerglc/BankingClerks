@@ -1,17 +1,18 @@
 import java.time.LocalTime;
 
 public class Clerk {
-    LocalTime available;
+    // when is clerk available
+    LocalTime availableTime;
 
-    public Clerk(String available) {
-        this.available = LocalTime.parse(available);
+    //constructor
+    public Clerk(String availableTime) {
+        this.availableTime = LocalTime.parse(availableTime);
     }
-
-    public LocalTime getAvailable() {
-        return available;
+    //getters and setters
+    public LocalTime getAvailableTime() {
+        return availableTime;
     }
-
-    public void setAvailable(LocalTime available) {
-        this.available = available;
+    public void setAvailableTime(LocalTime availableTime) {
+        this.availableTime = availableTime;
     }
 }
